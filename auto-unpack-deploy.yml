@@ -1,0 +1,25 @@
+name: Auto Unpack and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Unpack ZIP files
+        run: |
+          for file in *.zip; do
+            if [ -f "$file" ]; then
+              unzip -q "$file" -d "${file%.zip}"
+              echo "✅ Unpacked: $file"
+            fi
+          done
+
+      - name: List unpacked contents
+        run: ls -la
